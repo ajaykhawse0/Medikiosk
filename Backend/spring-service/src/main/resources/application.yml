@@ -1,0 +1,83 @@
+spring:
+  application:
+    name: medikiosk-spring-service
+
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/medikiosk}
+    username: ${DB_USERNAME:medikiosk}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 2
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+
+  jpa:
+    hibernate:
+      ddl-auto: validate   # Flyway owns the schema; Hibernate only validates
+    show-sql: false
+    open-in-view: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: false
+        jdbc:
+          time_zone: UTC
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: false
+    validate-on-migrate: true
+    out-of-order: false
+
+server:
+  port: ${SERVER_PORT:8080}
+  error:
+    include-message: never
+    include-binding-errors: never
+    include-stacktrace: never
+    include-exception: false
+
+app:
+  jwt:
+    secret: ${JWT_SECRET}
+    access-token-expiry-minutes: ${JWT_ACCESS_EXPIRY_MINUTES:15}
+    refresh-token-expiry-days: ${JWT_REFRESH_EXPIRY_DAYS:7}
+
+  security:
+    max-failed-login-attempts: ${MAX_FAILED_LOGIN_ATTEMPTS:5}
+    lockout-duration-minutes: ${LOCKOUT_DURATION_MINUTES:15}
+    password-reset-token-expiry-minutes: ${RESET_TOKEN_EXPIRY_MINUTES:30}
+
+  cors:
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:3000}
+
+  service:
+    # Shared secret for Node BFF → Spring internal calls.
+    # Production path: replace with mTLS client certificates.
+    api-key: ${SERVICE_API_KEY}
+
+  admin-bootstrap:
+    enabled: ${ADMIN_BOOTSTRAP_ENABLED:true}
+    email: ${ADMIN_BOOTSTRAP_EMAIL:}
+    full-name: ${ADMIN_BOOTSTRAP_FULL_NAME:System Administrator}
+    password: ${ADMIN_BOOTSTRAP_PASSWORD:}
+
+logging:
+  level:
+    com.medikiosk: INFO
+    org.springframework.security: WARN
+    org.hibernate.SQL: WARN
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%X{correlationId}] [%thread] %-5level %logger{36} - %msg%n"
+
+springdoc:
+  api-docs:
+    path: /api/v1/api-docs
+  swagger-ui:
+    path: /api/v1/swagger-ui.html
+    disable-swagger-default-url: true
+  show-actuator: false

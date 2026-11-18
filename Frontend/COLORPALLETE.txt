@@ -1,0 +1,23 @@
+Core palette
+
+The aim is clinical trust without the cold, sterile feel that healthcare sites often have. Soft neutrals do most of the work, and one accent color carries the actions.
+
+Role	Name	Hex	Use
+Primary	Deep Teal	
+#0F5E64	Headers, primary buttons, key icons
+Accent	Fresh Mint	
+#3CC4A8	Highlights, success states, small badges
+Background	Warm Paper	
+#FAFAF7	Main page background
+Surface	Pure White	
+#FFFFFF	Cards, panels, modals
+Text	Ink Slate	
+#1E2A2E	Body and headings
+Muted text	Stone Gray	
+#6B7A7E	Captions, helper text, metadata
+Border	Mist	
+#E4EAE8	Dividers, card outlines, inputs
+Soft tint	Sage Wash	
+#EEF6F3	Hover states, info panels, selected rows
+Alert	Coral Soft	
+#E9735E	Errors and urgent notices (use sparingly)

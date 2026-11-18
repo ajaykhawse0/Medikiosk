@@ -1,0 +1,120 @@
+# Spec-to-Plan Traceability Checkpoint
+metadata:
+  generated: "2026-11-18"
+  source_spec: "Medikiosk/PRD.md"
+  target_plan: "Medikiosk/Frontend/landing-auth-dashboard-plan.md"
+
+summary:
+  total_requirements: 11
+  covered_requirements: 11
+  missing_requirements: 0
+  coverage_percentage: 100.0
+
+requirements:
+  - req_id: "FR-08"
+    req_description: "Protected clinician routes require valid authentication"
+    priority: "P0"
+    plan_mapping:
+      phase: "Phase-2"
+      phase_name: "Landing and Authentication"
+      items:
+        - item_id: "2.1"
+          description: "Authentication state and API contract"
+        - item_id: "3.1"
+          description: "Protected route guards"
+        - item_id: "4.1"
+          description: "Doctor login screen"
+  - req_id: "FR-09"
+    req_description: "Server checks role and encounter-level access"
+    priority: "P0"
+    plan_mapping:
+      phase: "Phase-3"
+      phase_name: "Doctor Dashboard"
+      items:
+        - item_id: "3.1"
+          description: "Protected route guards"
+        - item_id: "6.1"
+          description: "Authorized encounter detail access"
+  - req_id: "FR-10"
+    req_description: "Clinicians list and open only permitted encounters"
+    priority: "P0"
+    plan_mapping:
+      items:
+        - item_id: "5.1"
+          description: "Doctor dashboard shell"
+        - item_id: "6.1"
+          description: "Encounter list and authorized detail access"
+  - req_id: "FR-11"
+    req_description: "Valid review status transitions are recorded"
+    priority: "P0"
+    plan_mapping:
+      items:
+        - item_id: "7.1"
+          description: "Dashboard review actions"
+  - req_id: "FR-12"
+    req_description: "Review decisions create audit events"
+    priority: "P0"
+    plan_mapping:
+      items:
+        - item_id: "7.1"
+          description: "Dashboard review actions"
+  - req_id: "FR-16"
+    req_description: "Multiple UI languages are translated and tested consistently"
+    priority: "P1"
+    plan_mapping:
+      items:
+        - item_id: "1.1"
+          description: "Public landing foundation"
+  - req_id: "FR-17"
+    req_description: "Logout, timeout, or completion clears session-specific state"
+    priority: "P0"
+    plan_mapping:
+      items:
+        - item_id: "8.1"
+          description: "Kiosk reset and session boundaries"
+  - req_id: "NFR-01"
+    req_description: "Server-side authentication, authorization, validation, and least privilege"
+    priority: "P0"
+    plan_mapping:
+      items:
+        - item_id: "2.1"
+          description: "Authentication state and API contract"
+        - item_id: "3.1"
+          description: "Protected route guards"
+  - req_id: "NFR-03"
+    req_description: "HTTPS and secrets/data protection"
+    priority: "P0"
+    plan_mapping:
+      items:
+        - item_id: "2.1"
+          description: "Authentication state and API contract"
+        - item_id: "8.1"
+          description: "Kiosk reset"
+  - req_id: "NFR-04"
+    req_description: "Clear patient-specific state on timeout, logout, or completion"
+    priority: "P0"
+    plan_mapping:
+      items:
+        - item_id: "1.1"
+          description: "Public landing foundation"
+        - item_id: "8.1"
+          description: "Kiosk reset"
+  - req_id: "NFR-06"
+    req_description: "Accessibility, keyboard support, readable typography, and clear errors"
+    priority: "P0"
+    plan_mapping:
+      items:
+        - item_id: "1.1"
+          description: "Public landing foundation"
+        - item_id: "4.1"
+          description: "Doctor login screen"
+        - item_id: "9.1"
+          description: "Responsive, accessible, and end-to-end verification"
+
+missing_requirements: []
+orphan_plan_items: []
+
+validation:
+  passed: true
+  errors: []
+  warnings: []

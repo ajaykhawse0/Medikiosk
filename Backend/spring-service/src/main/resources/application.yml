@@ -1,11 +1,13 @@
 spring:
   application:
     name: medikiosk-spring-service
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
 
   datasource:
-    url: ${DB_URL:jdbc:postgresql://localhost:5432/medikiosk}
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/medikiosk_dev}
     username: ${DB_USERNAME:medikiosk}
-    password: ${DB_PASSWORD}
+    password: ${DB_PASSWORD:medikioskPostGre}
     driver-class-name: org.postgresql.Driver
     hikari:
       maximum-pool-size: 10
@@ -34,7 +36,7 @@ spring:
     out-of-order: false
 
 server:
-  port: ${SERVER_PORT:8080}
+  port: ${SERVER_PORT:8081}
   error:
     include-message: never
     include-binding-errors: never
@@ -43,7 +45,7 @@ server:
 
 app:
   jwt:
-    secret: ${JWT_SECRET}
+    secret: ${JWT_SECRET:7r2aG/KGjZGIMaNjSd904AxKNrrLcQ7vMJL+rHQGoeY=}
     access-token-expiry-minutes: ${JWT_ACCESS_EXPIRY_MINUTES:15}
     refresh-token-expiry-days: ${JWT_REFRESH_EXPIRY_DAYS:7}
 
@@ -58,13 +60,13 @@ app:
   service:
     # Shared secret for Node BFF → Spring internal calls.
     # Production path: replace with mTLS client certificates.
-    api-key: ${SERVICE_API_KEY}
+    api-key: ${SERVICE_API_KEY:c2VjdXJlLW1lZGlraW9zay1zZXJ2aWNlLWFwaS1rZXktMjAyNg==}
 
   admin-bootstrap:
     enabled: ${ADMIN_BOOTSTRAP_ENABLED:true}
-    email: ${ADMIN_BOOTSTRAP_EMAIL:}
+    email: ${ADMIN_BOOTSTRAP_EMAIL:admin@medikiosk.local}
     full-name: ${ADMIN_BOOTSTRAP_FULL_NAME:System Administrator}
-    password: ${ADMIN_BOOTSTRAP_PASSWORD:}
+    password: ${ADMIN_BOOTSTRAP_PASSWORD:Ajay@Medikiosk06}
 
 logging:
   level:

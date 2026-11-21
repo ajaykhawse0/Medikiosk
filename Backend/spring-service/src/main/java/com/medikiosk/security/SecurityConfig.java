@@ -27,6 +27,7 @@ public class SecurityConfig {
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .requestMatchers("/api/internal/**", "/api/v1/internal/**").permitAll()
                         .requestMatchers("/api/v1/auth/login", "/api/v1/auth/refresh",
                                 "/api/v1/auth/forgot-password", "/api/v1/api-docs/**",
                                 "/api/v1/swagger-ui/**", "/api/v1/swagger-ui.html").permitAll()
@@ -45,6 +46,8 @@ public class SecurityConfig {
         java.util.List<String> origins = new java.util.ArrayList<>();
         origins.add("http://localhost:3000");
         origins.add("http://127.0.0.1:3000");
+        origins.add("http://localhost:5000");
+        origins.add("http://127.0.0.1:5000");
         origins.add("http://localhost:5173");
         origins.add("http://127.0.0.1:5173");
 

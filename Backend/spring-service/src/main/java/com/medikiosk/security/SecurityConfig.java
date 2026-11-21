@@ -41,10 +41,27 @@ public class SecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(Arrays.asList(properties.getCors().getAllowedOrigins().split(",")));
-        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-        config.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept", "X-Requested-With", "Origin"));
+
+        java.util.List<String> origins = new java.util.ArrayList<>();
+        origins.add("http://localhost:3000");
+        origins.add("http://127.0.0.1:3000");
+        origins.add("http://localhost:5173");
+        origins.add("http://127.0.0.1:5173");
+
+        if (properties.getCors() != null && properties.getCors().getAllowedOrigins() != null) {
+            Arrays.stream(properties.getCors().getAllowedOrigins().split(","))
+                    .map(String::trim)
+                    .filter(s -> !s.isBlank())
+                    .forEach(origins::add);
+        }
+
+        config.setAllowedOriginPatterns(origins.stream().distinct().toList());
+        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"));
+        config.setAllowedHeaders(Arrays.asList("*"));
+        config.setExposedHeaders(Arrays.asList("Authorization", "Content-Disposition", "Content-Type"));
         config.setAllowCredentials(true);
+        config.setMaxAge(3600L);
+
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
         return source;

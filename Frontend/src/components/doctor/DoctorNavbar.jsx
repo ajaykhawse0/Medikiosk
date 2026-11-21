@@ -1,8 +1,17 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+function getInitials(name) {
+  if (!name) return 'DR';
+  const clean = name.replace(/^Dr\.\s*/i, '').replace(/,\s*(MD|DO|MBBS|MS|PhD)$/i, '').trim();
+  const parts = clean.split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return 'DR';
+  if (parts.length === 1) return parts[0].substring(0, 2).toUpperCase();
+  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+}
+
 export default function DoctorNavbar({
-  doctor = { name: "Dr. Sarah Jenkins, MD", role: "DOCTOR", department: "Ambulatory & Urgent Care" },
+  doctor = { name: "Doctor", role: "DOCTOR", department: "Ambulatory & Urgent Care" },
   onOpenPatientSearch,
   onOpenProfile,
   onOpenResetPassword,
@@ -10,6 +19,8 @@ export default function DoctorNavbar({
 }) {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
+
+  const initials = getInitials(doctor.name);
 
   const handleSignOut = () => {
     if (onLogout) onLogout();
@@ -70,15 +81,15 @@ export default function DoctorNavbar({
               onClick={() => setMenuOpen(!menuOpen)}
               className="flex items-center gap-2.5 p-1.5 pr-3 rounded-xl border border-outline-variant/60 bg-surface-container-lowest hover:bg-surface-container-low transition-all shadow-2xs focus:outline-none"
             >
-              <div className="w-8 h-8 rounded-lg bg-primary-container text-on-primary flex items-center justify-center font-bold text-xs">
-                SJ
+              <div className="w-8 h-8 rounded-lg bg-primary-container text-on-primary flex items-center justify-center font-bold text-xs uppercase tracking-wide">
+                {initials}
               </div>
               <div className="text-left hidden sm:block">
                 <span className="font-label-sm text-xs font-semibold text-primary block leading-tight">
                   {doctor.name}
                 </span>
                 <span className="font-label-sm text-[11px] text-outline block leading-tight">
-                  {doctor.department}
+                  {doctor.department || 'Clinician Staff'}
                 </span>
               </div>
               <span className="material-symbols-outlined text-outline text-[18px]">

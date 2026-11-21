@@ -45,8 +45,11 @@ if (Test-Path $envFile) {
     Write-Host ">>> .env variables loaded successfully." -ForegroundColor Green
 }
 
+if (-not $env:SERVER_PORT) { $env:SERVER_PORT = "8081" }
+
 # 6. Start Spring Boot application
 Write-Host "`n>>> Starting MediKiosk Spring Service (profile: dev)..." -ForegroundColor Green
+Write-Host ">>> Port: $env:SERVER_PORT" -ForegroundColor Cyan
 Write-Host ">>> Swagger UI will be available at: http://localhost:$env:SERVER_PORT/api/v1/swagger-ui.html`n" -ForegroundColor Green
 
 mvn spring-boot:run "-Daether.syncContext.named.factory=noop"

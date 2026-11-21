@@ -26,44 +26,30 @@ export default function PatientSearchModal({ isOpen, onClose, onSelectPatientEnc
       }
     } catch {
       // Fallback for demo mock search
-        const q = emailQuery.trim().toLowerCase();
-        if (q.includes('jane')) {
-          setResult({
-            patientId: 'PT-9941',
-            fullName: 'Jane Doe',
-            email: 'jane.doe@example.com',
-            encounterId: 'ENC-8842'
-          });
-        } else if (q.includes('marcus')) {
-          setResult({
-            patientId: 'PT-9942',
-            fullName: 'Marcus Sterling',
-            email: 'marcus.sterling@example.com',
-            encounterId: 'ENC-8841'
-          });
-        } else if (q.includes('priya')) {
-          setResult({
-            patientId: 'PT-9943',
-            fullName: 'Priya Sharma',
-            email: 'priya.sharma@example.com',
-            encounterId: 'ENC-8840'
-          });
-        } else {
-          setError(`No registered patient matches "${emailQuery.trim()}". Only exact normalized email matches are permitted.`);
-        }
-      }
-    } catch (err) {
-      // Local preview fallback
       const q = emailQuery.trim().toLowerCase();
-      if (q.includes('jane') || q.includes('doe')) {
+      if (q.includes('jane')) {
         setResult({
           patientId: 'PT-9941',
           fullName: 'Jane Doe',
           email: 'jane.doe@example.com',
           encounterId: 'ENC-8842'
         });
+      } else if (q.includes('marcus')) {
+        setResult({
+          patientId: 'PT-9942',
+          fullName: 'Marcus Sterling',
+          email: 'marcus.sterling@example.com',
+          encounterId: 'ENC-8841'
+        });
+      } else if (q.includes('priya')) {
+        setResult({
+          patientId: 'PT-9943',
+          fullName: 'Priya Sharma',
+          email: 'priya.sharma@example.com',
+          encounterId: 'ENC-8840'
+        });
       } else {
-        setError(`Search completed: No patient records found for "${emailQuery.trim()}".`);
+        setError(`No registered patient matches "${emailQuery.trim()}". Only exact normalized email matches are permitted.`);
       }
     } finally {
       setLoading(false);

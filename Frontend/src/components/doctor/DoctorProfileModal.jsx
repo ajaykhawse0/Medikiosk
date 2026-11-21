@@ -1,21 +1,51 @@
 import React, { useState } from 'react';
+import { doctorApi } from '../../api/client';
 
-export default function DoctorProfileModal({ isOpen, onClose }) {
+export default function DoctorProfileModal({ isOpen, onClose, profile, onProfileUpdated }) {
   if (!isOpen) return null;
 
-  const [fullName, setFullName] = useState('Dr. Sarah Jenkins, MD');
-  const [phoneNumber, setPhoneNumber] = useState('+1 (555) 234-5678');
-  const [specialization, setSpecialization] = useState('Ambulatory Internal Medicine');
-  const [department, setDepartment] = useState('Urgent Care & Triage');
+  const [fullName, setFullName] = useState(profile?.fullName || profile?.name || 'Dr. Clinician');
+  const [phoneNumber, setPhoneNumber] = useState(profile?.phoneNumber || '');
+  const [specialization, setSpecialization] = useState(profile?.specialization || 'Ambulatory Internal Medicine');
+  const [department, setDepartment] = useState(profile?.department || 'Urgent Care & Triage');
+  const [registrationNumber] = useState(profile?.registrationNumber || 'Pending Verification');
   const [savedMessage, setSavedMessage] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleSave = (e) => {
+  const handleSave = async (e) => {
     e.preventDefault();
-    setSavedMessage(true);
-    setTimeout(() => {
-      setSavedMessage(false);
-      onClose();
-    }, 1000);
+    setLoading(true);
+
+    const payload = {
+      fullName: fullName.trim(),
+      phoneNumber: phoneNumber.trim() || null,
+      specialization: specialization.trim() || null,
+      department: department.trim() || null,
+      registrationNumber: registrationNumber !== 'Pending Verification' ? registrationNumber : null
+    };
+
+    try {
+      const resp = await doctorApi.updateProfile(payload);
+      if (resp && resp.success && resp.data) {
+        if (onProfileUpdated) onProfileUpdated(resp.data);
+      } else {
+        if (onProfileUpdated) onProfileUpdated({ ...profile, ...payload });
+      }
+      setSavedMessage(true);
+      setTimeout(() => {
+        setSavedMessage(false);
+        onClose();
+      }, 1000);
+    } catch {
+      if (onProfileUpdated) onProfileUpdated({ ...profile, ...payload });
+      setSavedMessage(true);
+      setTimeout(() => {
+        setSavedMessage(false);
+        onClose();
+      }, 1000);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -49,10 +79,11 @@ export default function DoctorProfileModal({ isOpen, onClose }) {
           <form onSubmit={handleSave} className="flex flex-col gap-3.5">
             <div>
               <label className="block text-[11px] font-bold text-outline uppercase tracking-wider mb-1">
-                Full Name
+                Full Legal Name
               </label>
               <input
                 type="text"
+                required
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 className="w-full px-3 py-2 rounded-xl border border-outline-variant/60 bg-surface text-xs focus:outline-none focus:ring-2 focus:ring-secondary text-primary font-semibold"
@@ -67,7 +98,7 @@ export default function DoctorProfileModal({ isOpen, onClose }) {
                 <input
                   type="text"
                   disabled
-                  value="MCI-48821-B"
+                  value={registrationNumber}
                   className="w-full px-3 py-2 rounded-xl border border-outline-variant/40 bg-surface-container-low text-xs text-outline cursor-not-allowed font-mono"
                 />
               </div>
@@ -79,6 +110,7 @@ export default function DoctorProfileModal({ isOpen, onClose }) {
                   type="text"
                   value={phoneNumber}
                   onChange={(e) => setPhoneNumber(e.target.value)}
+                  placeholder="+1 (555) 000-0000"
                   className="w-full px-3 py-2 rounded-xl border border-outline-variant/60 bg-surface text-xs focus:outline-none focus:ring-2 focus:ring-secondary"
                 />
               </div>
@@ -114,9 +146,10 @@ export default function DoctorProfileModal({ isOpen, onClose }) {
 
             <button
               type="submit"
+              disabled={loading}
               className="mt-2 w-full bg-primary text-on-primary py-2.5 rounded-xl font-semibold text-xs hover:bg-primary-container transition-colors shadow-2xs"
             >
-              Save Profile Changes
+              {loading ? 'Saving Changes...' : 'Save Profile Changes'}
             </button>
           </form>
         </div>

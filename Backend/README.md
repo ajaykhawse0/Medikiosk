@@ -51,9 +51,9 @@ cd Backend\spring-service
 Or double-click `run-service.bat`.
 
 Once started:
-- **API Base:** `http://localhost:8080/api/v1`
-- **Swagger UI:** `http://localhost:8080/api/v1/swagger-ui.html`
-- **OpenAPI JSON:** `http://localhost:8080/api/v1/api-docs`
+- **API Base:** `http://localhost:8081/api/v1`
+- **Swagger UI:** `http://localhost:8081/api/v1/swagger-ui.html`
+- **OpenAPI JSON:** `http://localhost:8081/api/v1/api-docs`
 
 ---
 

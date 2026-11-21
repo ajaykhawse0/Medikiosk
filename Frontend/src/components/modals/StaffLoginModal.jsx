@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { authApi, setSession as storeSession } from '../../api/client';
 
 export default function StaffLoginModal({ isOpen, onClose, onLoginSuccess }) {
   const [email, setEmail] = useState('');
@@ -26,35 +27,17 @@ export default function StaffLoginModal({ isOpen, onClose, onLoginSuccess }) {
     setError('');
 
     try {
-      const resp = await fetch('http://localhost:8080/api/v1/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
-      });
-      const data = await resp.json();
+      const data = await authApi.login({ email, password });
 
-      if (resp.ok && data.success) {
+      if (data && data.success && data.data) {
+        storeSession(data.data);
         setSession(data.data);
         if (onLoginSuccess) onLoginSuccess(data.data);
       } else {
-        // Fallback for mock preview if Spring Boot is not actively listening
-        if (email === 'admin@medikiosk.local') {
-          const mockAdmin = {
-            userId: '11111111-1111-1111-1111-111111111111',
-            name: 'System Administrator',
-            email: 'admin@medikiosk.local',
-            role: 'ADMIN',
-            mustChangePassword: false,
-            accessToken: 'mock-admin-jwt-token'
-          };
-          setSession(mockAdmin);
-          if (onLoginSuccess) onLoginSuccess(mockAdmin);
-        } else {
-          setError(data.message || 'Invalid credentials. Please verify your email & password.');
-        }
+        setError(data?.message || 'Invalid credentials. Please verify your email & password.');
       }
     } catch (err) {
-      // Backend not running on 8080 -> provide demo preview login
+      // Backend not running on 8081 -> provide demo preview login
       if (email === 'admin@medikiosk.local' || email.includes('admin')) {
         const mockAdmin = {
           userId: '11111111-1111-1111-1111-111111111111',
@@ -64,9 +47,11 @@ export default function StaffLoginModal({ isOpen, onClose, onLoginSuccess }) {
           mustChangePassword: false,
           accessToken: 'demo-admin-jwt-preview'
         };
+        storeSession(mockAdmin);
         setSession(mockAdmin);
+        if (onLoginSuccess) onLoginSuccess(mockAdmin);
       } else {
-        setError('Cannot reach Spring backend on localhost:8080. (Demo Admin login works offline).');
+        setError(err.message || 'Cannot reach Spring backend on localhost:8081. (Demo Admin login works offline).');
       }
     } finally {
       setLoading(false);
